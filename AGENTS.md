@@ -8,10 +8,7 @@ This is a Python data pipeline starter repo for the TDWI "Agentic Code Generatio
 
 ### Key Gotchas
 
-- **`requirements.txt` has an intentionally invalid pytest version** (`pytest==0.0.3`). This is part of the lab exercise. Do NOT run `pip install -r requirements.txt` directly — it will fail. Instead, install pandas and matplotlib at pinned versions, and install pytest without a version pin:
-  ```
-  pip install --user pandas==3.0.3 matplotlib==3.10.9 pytest
-  ```
+- **Install dependencies** with `pip install -r requirements.txt`. The file pins `pandas==3.0.3`, `matplotlib==3.10.9`, and `pytest==9.0.3`.
 - **Source files may not exist** until the lab exercise creates them. The expected layout is:
   - `src/generate_sales_report.py` — main pipeline script
   - `tests/test_sales_report.py` — pytest tests
