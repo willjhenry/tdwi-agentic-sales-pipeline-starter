@@ -8,15 +8,13 @@ This is a Python data pipeline starter repo for the TDWI "Agentic Code Generatio
 
 ### Key Gotchas
 
-- **`requirements.txt` has an intentionally invalid pytest version** (`pytest==0.0.3`). This is part of the lab exercise. Do NOT run `pip install -r requirements.txt` directly — it will fail. Instead, install pandas and matplotlib at pinned versions, and install pytest without a version pin:
-  ```
-  pip install --user pandas==3.0.3 matplotlib==3.10.9 pytest
-  ```
-- **Source files may not exist** until the lab exercise creates them. The expected layout is:
+- **Install dependencies** with `pip install -r requirements.txt` or `pip install --user -r requirements.txt`. The file pins `pandas==3.0.3`, `matplotlib==3.10.9`, and `pytest==9.0.3`.
+- **Expected layout** (files live in subdirectories, not the repo root):
   - `src/generate_sales_report.py` — main pipeline script
   - `tests/test_sales_report.py` — pytest tests
-  - `data/messy_sales_data.csv` — input data (100 rows)
-- **pip installs to `~/.local/bin`** — ensure `PATH` includes `$HOME/.local/bin` for `pytest` CLI access.
+  - `data/messy_sales_data.csv` — input data (25 rows)
+- **pip `--user` installs to `~/.local/bin`** — ensure `PATH` includes `$HOME/.local/bin` for `pytest` CLI access.
+- **`create_chart()` has a known bug** — `df.groupby("date")["revenue"].sum().plot(kind="bar")` raises `ValueError: Must supply freq for datetime value` due to a pandas/matplotlib compatibility issue. The rest of the pipeline (load, clean, metrics, export) works correctly.
 
 ### Running the pipeline
 
