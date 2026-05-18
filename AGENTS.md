@@ -14,7 +14,7 @@ Install from `requirements.txt`:
 pip install -r requirements.txt
 ```
 
-In Cloud Agent environments, pandas, matplotlib, and pytest are pre-installed via `.cursor/Dockerfile`.
+In Cloud Agent environments, pandas, matplotlib, and pytest are pre-installed via the root `Dockerfile`.
 
 ### Repo layout
 
@@ -44,8 +44,8 @@ No linter is configured in this repo. If you add one (e.g. `ruff`, `flake8`), in
 
 ### Docker (optional)
 
-The Cloud Agent Dockerfile lives at `.cursor/Dockerfile` (see `.cursor/environment.json`). Build secrets are not required for the image build; `REPORT_EXPORT_KEY` is only used at runtime in the script.
+The Cloud Agent Dockerfile lives at `Dockerfile` (see `.cursor/environment.json`). Build secrets are not required for the image build; `REPORT_EXPORT_KEY` is only used at runtime in the script.
 
 ```bash
-docker build -f .cursor/Dockerfile -t sales-pipeline .
+docker build -f Dockerfile -t sales-pipeline .
 ```
