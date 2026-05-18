@@ -1,15 +1,12 @@
 # syntax=docker/dockerfile:1
-FROM python:3.12-slim
+# Full image (not slim): more system libs/build tools; still add Cloud Agent essentials below.
+FROM python:3.12
 
-# Cloud Agent interactive terminals attach via tmux (see Cursor cloud agent docs).
+# tmux/sudo/git are not in the official Python image; required for Cloud Agent terminals.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    bash \
-    ca-certificates \
     git \
     sudo \
     tmux \
-    libfreetype6 \
-    libpng16-16 \
     && rm -rf /var/lib/apt/lists/*
 
 # Cloud Agents expect a login user named ubuntu for shell/terminal access.
