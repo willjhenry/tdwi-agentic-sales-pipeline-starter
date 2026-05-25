@@ -5,7 +5,7 @@
 # ================================================
 
 # Full Python image (not slim) — includes more system libs for builds and matplotlib.
-FROM python:3.12
+FROM python:3.13
 
 # Cloud Agent terminals run in tmux (see Cursor cloud agent setup docs).
 # git/sudo are commonly needed for repo work and passwordless admin tasks.
