@@ -1,0 +1,9 @@
+{
+  "$schema": "https://www.cursor.com/schemas/environment.schema.json",
+  "user": "ubuntu",
+  "install": "pip install -r requirements.txt",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": ".."
+  }
+}
