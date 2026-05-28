@@ -1,71 +1,55 @@
-# TDWI Agentic Sales Data Pipeline – Lab 3 Starter Repo
+# TDWI Agentic Sales Pipeline — Workshop Setup
 
-**Course:** Agentic Code Generation: From Prompting to Production-Ready Autonomous Agents  
-**Lab 3:** From Broken Script → Self-Testing Production PR (60–75 minutes)
+This repository is the starter project for the hands-on workshop. **Workshop instructions and lab content live in the Jupyter notebook** ([`LAB3-Cloud-Agent-Environment-Setup.ipynb`](LAB3-Cloud-Agent-Environment-Setup.ipynb)).
 
-**Welcome!**  
-This is a deliberately buggy but realistic data pipeline for the hands-on lab.  
-Your Cloud Agent will clean messy sales data, run real tests **in the cloud**, generate a report chart, and open a PR — all while you close your laptop.
-
-### Files in this repo
-- `data/messy_sales_data.csv` – 100 rows of intentionally messy e-commerce data  
-- `src/generate_sales_report.py` – buggy script the agent must fix  
-- `tests/test_sales_report.py` – failing tests the agent must make pass  
-- `requirements.txt` – pandas, matplotlib, pytest  
-- `Dockerfile` – production-ready config (full Python image + ubuntu user)  
-- `.cursor/environment.json` – tells Cursor to use the Dockerfile
-
-### Lab Instructions (real 2026 production flow)
-
-**Step 1: Clone and open the repo in Cursor**
-```bash
-git clone https://github.com/willjhenry/tdwi-agentic-sales-pipeline-starter.git
-cd tdwi-agentic-sales-pipeline-starter
-code .
-```
-
-**Step 2: Create your Cloud Agent Development Environment (Dockerfile-managed)**  
-1. Open **Agents Window** (Cmd/Ctrl + Shift + P → “Agents: Open Agents Window”).  
-2. Go to the **Environment** tab → **Create new Development Environment**.  
-3. Name it: `Sales Pipeline Env`.  
-4. Choose **Agent-driven setup**.  
-   → Cursor will automatically read `.cursor/environment.json` and use the committed `Dockerfile`.
-
-**Step 3: Manually attach the build secret (important production step)**  
-1. After the environment shows “Ready”, stay in the **Environment** tab.  
-2. In the **Secrets** section, click **Attach secret**.  
-3. Select (or create in My Secrets dashboard) the secret named `REPORT_EXPORT_KEY`.  
-4. Enter any fake value (e.g. `demo-123`).  
-5. Set the toggle to **“This repo”** (least-privilege best practice).  
-
-**Step 4: Give the agent its mission**  
-Paste this exact prompt into Composer or the Agent chat:
-
-> “You are a senior data engineer. Fix the buggy sales data pipeline.  
-> 1. Clean messy_sales_data.csv (remove duplicates, fix dates, calculate correct revenue).  
-> 2. Add summary metrics (total revenue, top 5 customers, avg order value).  
-> 3. Generate a matplotlib chart and save it as report.png in the root.  
-> 4. Use the REPORT_EXPORT_KEY secret to ‘encrypt’ the final CSV export (mock function).  
-> 5. Make all tests in tests/test_sales_report.py pass.  
-> 6. Run the full test suite with pytest.  
-> Only open a PR when everything is green. Include the chart and a one-paragraph business summary in the PR description.”
-
-**Step 5: Watch the agent work (20–30 min)**  
-- The agent will use the Cloud Dev Environment you defined.  
-- It will edit code, run `pytest` **in the cloud**, iterate until tests pass, and open a PR.  
-- You can close your laptop — the agent keeps going.
-
-**Step 6: Debrief & Best-Practice Takeaways (15 min – group discussion)**  
-Answer these on your handout:  
-1. How was the test-running experience different from basic Cloud Agents?  
-2. What did the per-secret “This repo” / “All repos” toggle actually control?  
-3. Why do we manage the environment with a committed `Dockerfile` + `.cursor/environment.json`?  
-4. Which Module 4 safety rules did we just apply? (Dockerfile as code, manual secret attachment, build vs runtime secrets)
+Follow the steps below to fork, clone, and verify you can push to your own copy on GitHub. There are two benefits of forking:
+1. You will be able to run Cursor Cloud Agents in your own environment, which is the point of this lab.
+2. You can push your changes to your own copy of the repository.
 
 ---
 
-**Production Note for Managers**  
-Dockerfile-managed environments give you version-controlled consistency (exactly what enterprise teams use). Secrets are attached manually, which is the expected pattern when you want full control. For real production pipelines, prefer external secret managers + MCP for runtime credentials.
+## 1. Create a GitHub account if you don't have one (if you already have an account, skip this step)
 
-Enjoy the lab!  
-— Your TDWI Instructor
+   1. Go to [GitHub](https://github.com) and create an account.
+
+## 2. Authenticate your local Git to your GitHub account
+
+1. You only need to complete this step if you created a new account **or** if your local Git is not authenticated to your GitHub account. If you are unsure, you can skip this step now and come back to it if you are prompted for a password in step 5
+2. Create a **classic** Personal Access Token with the **`repo`** scope:
+   1. Sign in to [GitHub](https://github.com)
+   2. Open your profile menu (top right) → **Settings**
+   3. In the left sidebar, scroll to **Developer settings** → **Personal access tokens** → **Tokens (classic)**
+   4. Click **Generate new token** → **Generate new token (classic)**
+   5. Add a note (e.g. `TDWI workshop`), set an expiration if you like, and check the **`repo`** scope
+   6. Click **Generate token**, then **copy the token immediately** (you will not see it again). Store it somewhere safe—you will use it as your password when Git prompts you over HTTPS
+
+## 3. Fork the workshop repository
+
+1. Go to the main workshop repo on GitHub:  
+   **https://github.com/willjhenry/tdwi-agentic-sales-pipeline-starter**
+2. Click **Fork** → **Create a new fork**
+3. Click **Create fork** in the lower right
+
+## 4. Clone your fork in Cursor
+
+1. Copy the HTTPS URL from **your** forked repo (**Code** → **HTTPS**, then copy the link)
+2. In Cursor, open the Command Palette (**Cmd/Ctrl + Shift + P**) → type: **Git: Clone**
+3. Paste the HTTPS URL and clone the repo
+4. Select **Open** when asked if you would like to open the cloned repository
+5. Select **Open Workspace** when the popup appears in the lower right
+
+## 5. Make your first push
+
+1. Create a test file, `test.txt`. In the file write:
+   `this is just a test file to test committing and pushing`
+2. Commit the change in Cursor:
+   1. Open the **Source Control** tab in the Primary Side Bar
+   2. Press the **+** (plus) to the right of `test.txt` to stage the file
+   3. Write a simple commit message in the **Message** input, e.g. `a test commit`
+   4. Press the **Commit** button
+   5. Press the **Synchronize Changes** button in the lower left corner
+   6. If Git prompts for credentials: enter your **GitHub username** and, for the password, paste your **Personal Access Token** (created in step 2)—not your GitHub account password
+
+---
+
+After setup, open [`LAB3-Cloud-Agent-Environment-Setup.ipynb`](LAB3-Cloud-Agent-Environment-Setup.ipynb) for the workshop lab steps.
