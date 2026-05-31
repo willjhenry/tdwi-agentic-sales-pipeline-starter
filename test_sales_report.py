@@ -2,7 +2,6 @@ import pytest
 import pandas as pd
 from generate_sales_report import (
     load_and_clean_data,
-    clean_data,
     generate_metrics,
 )
 
@@ -10,7 +9,7 @@ from generate_sales_report import (
 @pytest.fixture
 def cleaned_df():
     df = load_and_clean_data()
-    return clean_data(df)
+    return df
 
 
 def test_total_revenue_is_positive(cleaned_df):
@@ -30,7 +29,6 @@ def test_top_customers_have_5_entries(cleaned_df):
 
 
 def test_revenue_calculation_is_correct(cleaned_df):
-    # Agent must fix the revenue logic so this passes
     expected = cleaned_df["price"] * cleaned_df["quantity"]
     assert (cleaned_df["revenue"] == expected).all(), "Revenue must be price * quantity"
 
