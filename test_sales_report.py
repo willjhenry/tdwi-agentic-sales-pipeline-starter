@@ -1,6 +1,10 @@
 import pytest
 import pandas as pd
-from src.generate_sales_report import load_and_clean_data, clean_data, generate_metrics
+from generate_sales_report import (
+    load_and_clean_data,
+    clean_data,
+    generate_metrics,
+)
 
 
 @pytest.fixture
