@@ -50,7 +50,7 @@ python generate_sales_report.py
 python -m pytest test_sales_report.py
 ```
 
-ALWAYS run the tests before pushing your changes to the repository.
+Always run `python -m pytest test_sales_report.py` before pushing changes. Ensure all tests pass before pushing.
 
 ### Linting
 
