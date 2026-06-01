@@ -27,7 +27,7 @@ def create_chart(df):
 
 
 def mock_encrypt_export(df, secret_key):
-    # Uses the build secret (REPORT_EXPORT_KEY)
+    # Uses the secret (REPORT_EXPORT_KEY)
     encrypted_file = "output/encrypted_sales_report.csv"
     df.to_csv(encrypted_file, index=False)
     print(f"Exported encrypted report using secret: {secret_key[:4]}...")
