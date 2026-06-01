@@ -1,8 +1,6 @@
 # AGENTS.md
 
-## Cursor Cloud specific instructions
-
-### Overview
+## Overview
 
 This is a Python data pipeline starter repo for the TDWI "Agentic Code Generation" lab. It cleans messy e-commerce sales data, runs tests, and generates a sales report chart.
 
@@ -17,15 +15,6 @@ These files are for **humans** during the workshop. They exist in the repo but a
 
 Use **this file (`AGENTS.md`)**, the user's prompt, and the Python source/tests as your source of truth. Do not modify the lab notebook unless the user explicitly asks.
 
-### Dependencies
-
-Install from `requirements.txt`:
-
-```bash
-pip install -r requirements.txt
-```
-
-In Cloud Agent environments, all dependencies are pre-installed via the root `Dockerfile`.
 
 ### Repo layout
 
@@ -37,6 +26,8 @@ Starter files live at the repo root:
 Data files live in the `data` directory:
 
 - `data/messy_sales_data.csv` — messy e-commerce input data
+
+## Core Workflow Rules
 
 ### Running the pipeline
 
@@ -50,16 +41,5 @@ python generate_sales_report.py
 python -m pytest test_sales_report.py
 ```
 
-Always run `python -m pytest test_sales_report.py` before pushing changes. Ensure all tests pass before pushing.
+Always run `python -m pytest test_sales_report.py` before pushing changes. Ensure all tests pass before pushing. After fixing code, re-run the tests to verify the fixes. If a test fails, diagnose the issue, fix it, and re-run the tests to verify. Iterate until all tests pass and you have met the user's requirements.
 
-### Linting
-
-No linter is configured in this repo. If you add one (e.g. `ruff`, `flake8`), install it separately.
-
-### Docker (optional)
-
-Cloud environment config is in `.cursor/environment.json`: the **build** step uses the root `Dockerfile`, and the **install** hook runs `pip install -r requirements.txt` when the environment starts (so dependencies may be installed both at image build and again on startup). Build secrets are not required for the image build; `REPORT_EXPORT_KEY` is only used at runtime in the script.
-
-```bash
-docker build -f Dockerfile -t sales-pipeline .
-```
