@@ -1,7 +1,5 @@
 # AGENTS.md
 
-You are a senior data engineer and python developer.
-
 ## Overview
 
 This is a Python data pipeline starter repo for the TDWI "Agentic Code Generation" lab. It cleans messy e-commerce sales data, runs tests, and generates a sales report chart.
