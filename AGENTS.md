@@ -15,7 +15,6 @@ These files are for **humans** during the workshop. They exist in the repo but a
 
 Use **this file (`AGENTS.md`)**, the user's prompt, and the Python source/tests as your source of truth. Do not modify the lab notebook unless the user explicitly asks.
 
-
 ### Repo layout
 
 Starter files live at the repo root:
