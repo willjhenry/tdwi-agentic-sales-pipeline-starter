@@ -41,4 +41,4 @@ python generate_sales_report.py
 ```bash
 python -m pytest test_sales_report.py
 ```
-
+Always run `python -m pytest test_sales_report.py` before pushing changes. Ensure all tests pass before pushing. After fixing code, re-run the tests to verify the fixes. If a test fails, diagnose the issue, fix it, and re-run the tests to verify. Iterate until all tests pass and you have met the user's requirements.
