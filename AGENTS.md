@@ -11,7 +11,9 @@ Lab work is to implement data cleaning in `load_and_clean_data()` in `generate_s
 These files are for **humans** during the workshop. They exist in the repo but are **not** your runbook:
 
 - **`README.md`** — one-time setup (GitHub, fork, clone, local `.venv`, test push). **Do not** follow or repeat these steps.
-- **`LAB3-Cloud-Agent-Environment-Setup.ipynb`** — in-lab UI walkthrough (Cloud Agent environment, secrets, prompts). **Do not** follow notebook steps (fork, clone, Environment tab flows, secret attachment, etc.). Humans perform those while you work on code.
+- **`LAB3-Part-1-Cloud-Agent-Environment-Setup.ipynb`** — Part 1 UI walkthrough (Cloud Agent environment, secrets). **Do not** follow notebook steps.
+- **`LAB3-Part-2-Running-Cursor-Cloud-Agents.ipynb`** — Part 2 UI walkthrough (local tests, Cloud Agent fix, PR review). **Do not** follow notebook steps.
+- **`LAB3-Part-3-Automations.ipynb`** — Part 3 Automations setup and Streamlit Cloud Agent prompt. **Do not** follow notebook steps.
 
 Use **this file (`AGENTS.md`)**, the user's prompt, and the Python source/tests as your source of truth. Do not modify the lab notebook unless the user explicitly asks.
 
@@ -39,6 +41,4 @@ python generate_sales_report.py
 ```bash
 python -m pytest test_sales_report.py
 ```
-
-Always run `python -m pytest test_sales_report.py` before pushing changes. Ensure all tests pass before pushing. After fixing code, re-run the tests to verify the fixes. If a test fails, diagnose the issue, fix it, and re-run the tests to verify. Iterate until all tests pass and you have met the user's requirements.
 

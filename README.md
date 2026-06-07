@@ -1,6 +1,10 @@
 # TDWI Agentic Sales Pipeline — Workshop Setup
 
-This repository is the starter project for the hands-on workshop. **Workshop instructions and lab content live in the Jupyter notebook** ([`LAB3-Cloud-Agent-Environment-Setup.ipynb`](LAB3-Cloud-Agent-Environment-Setup.ipynb)).
+This repository is the starter project for the hands-on workshop. **Workshop lab content lives in the Jupyter notebooks:**
+
+- Part 1 (Cloud Agent environment setup): [`LAB3-Part-1-Cloud-Agent-Environment-Setup.ipynb`](LAB3-Part-1-Cloud-Agent-Environment-Setup.ipynb)
+- Part 2 (fix pipeline with Cloud Agent): [`LAB3-Part-2-Running-Cursor-Cloud-Agents.ipynb`](LAB3-Part-2-Running-Cursor-Cloud-Agents.ipynb)
+- Part 3 (PR review automations, Revenue Explorer): [`LAB3-Part-3-Automations.ipynb`](LAB3-Part-3-Automations.ipynb)
 
 Follow the steps below to fork, clone, and verify you can push to your own copy on GitHub. There are two benefits of forking:
 1. You will be able to run Cursor Cloud Agents in your own environment, which is the point of this lab.
@@ -81,4 +85,4 @@ When the venv is active, your terminal prompt usually shows `(.venv)`. You can c
 
 ---
 
-After setup, open [`LAB3-Cloud-Agent-Environment-Setup.ipynb`](LAB3-Cloud-Agent-Environment-Setup.ipynb) for the workshop lab steps.
+After setup, open [`LAB3-Part-1-Cloud-Agent-Environment-Setup.ipynb`](LAB3-Part-1-Cloud-Agent-Environment-Setup.ipynb), then [`LAB3-Part-2-Running-Cursor-Cloud-Agents.ipynb`](LAB3-Part-2-Running-Cursor-Cloud-Agents.ipynb). After Part 2, continue with [`LAB3-Part-3-Automations.ipynb`](LAB3-Part-3-Automations.ipynb).
