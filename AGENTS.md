@@ -4,7 +4,7 @@
 
 This is a Python data pipeline starter repo for the TDWI "Agentic Code Generation" lab. It cleans messy e-commerce sales data, runs tests, and generates a sales report chart.
 
-Lab work is to implement data cleaning in `load_and_clean_data()` in `generate_sales_report.py` until `test_sales_report.py` passes (dedupe orders, fix dates, correct revenue). Do not reorganize the repo or change import paths unless the user asks.
+This is a **hands-on workshop** repository, not production code. The **user's prompt** defines the task for each agent session. Do not reorganize the repo or change import paths unless the user asks.
 
 ### Human-only lab docs
 
