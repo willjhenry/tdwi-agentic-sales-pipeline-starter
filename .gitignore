@@ -4,3 +4,5 @@ __pycache__/
 output/
 INSTRUCTOR.md
 NOTEBOOK_STYLE_GUIDE.ipynb
+AGENTS_DEV.md
+.cursor/rules/course-authoring.mdc
