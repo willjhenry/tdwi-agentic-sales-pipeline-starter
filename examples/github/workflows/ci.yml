@@ -1,0 +1,30 @@
+# EXAMPLE ONLY — not used in the lab. Copy to .github/workflows/ci.yml on your fork (Recipe 4).
+#
+# When adopting:
+#   1. Copy examples/scripts/check.py to scripts/check.py
+#   2. Change the run step below to: python scripts/check.py
+#   3. Add ruff or other tools to requirements.txt / check.py as needed
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run example check script
+        run: python examples/scripts/check.py
