@@ -11,7 +11,6 @@ This is a **hands-on workshop** repository, not production code. The **user's pr
 These files are for **humans** during the workshop. They exist in the repo but are **not** your runbook:
 
 - **`README.md`** — one-time setup (GitHub, fork, clone, local `.venv`, test push). **Do not** follow or repeat these steps.
-- **`INSTRUCTOR.md`** — instructor-only teaching notes. **Do not** follow.
 - **`LAB3-Part-1-Cloud-Agent-Environment-Setup.ipynb`** — Part 1 UI walkthrough (Cloud Agent environment, secrets). **Do not** follow notebook steps.
 - **`LAB3-Part-2-Running-Cursor-Cloud-Agents.ipynb`** — Part 2 UI walkthrough (local tests, Cloud Agent fix, PR review). **Do not** follow notebook steps.
 - **`LAB3-Part-3-Automations.ipynb`** — Part 3 Automations setup and Streamlit Cloud Agent prompt. **Do not** follow notebook steps.
