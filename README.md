@@ -15,6 +15,8 @@ This repository is the starter project for the hands-on workshop. **Workshop lab
 | **2** | Run failing tests → `AGENTS.md` → Cloud Agent → review & merge PR | Agent context, draft PRs, human verification |
 | **3** | PR review Automation → Cloud Agent adds Streamlit app → mark PR ready | Event-driven agents; Automations vs Bugbot vs CI |
 
+**Instructors:** timeboxes, pre-class checklist, and teaching notes are in [INSTRUCTOR.md](INSTRUCTOR.md).
+
 Follow the steps below to fork, clone, and verify you can push to your own copy on GitHub. There are two benefits of forking:
 1. You will be able to run Cursor Cloud Agents in your own environment, which is the point of this lab.
 2. You can push your changes to your own copy of the repository.
