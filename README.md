@@ -6,6 +6,15 @@ This repository is the starter project for the hands-on workshop. **Workshop lab
 - Part 2 (fix pipeline with Cloud Agent): [`LAB3-Part-2-Running-Cursor-Cloud-Agents.ipynb`](LAB3-Part-2-Running-Cursor-Cloud-Agents.ipynb)
 - Part 3 (PR review automations, Revenue Explorer): [`LAB3-Part-3-Automations.ipynb`](LAB3-Part-3-Automations.ipynb)
 
+### Lab map
+
+| Part | You do | You learn |
+|------|--------|-----------|
+| **Setup** ([README](README.md)) | Fork, clone, `.venv`, test push | Your own GitHub repo for Cloud Agents |
+| **1** | Dockerfile + `environment.json`, secrets | Reproducible Cloud Agent environment |
+| **2** | Run failing tests → `AGENTS.md` → Cloud Agent → review & merge PR | Agent context, draft PRs, human verification |
+| **3** | PR review Automation → Cloud Agent adds Streamlit app → mark PR ready | Event-driven agents; Automations vs Bugbot vs CI |
+
 Follow the steps below to fork, clone, and verify you can push to your own copy on GitHub. There are two benefits of forking:
 1. You will be able to run Cursor Cloud Agents in your own environment, which is the point of this lab.
 2. You can push your changes to your own copy of the repository.
