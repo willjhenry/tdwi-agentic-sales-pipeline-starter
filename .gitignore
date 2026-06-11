@@ -9,3 +9,5 @@ BACKLOG.md
 .cursor/rules/course-authoring.mdc
 .png
 .csv
+.ipynb_checkpoints/
+.pytest_cache/
