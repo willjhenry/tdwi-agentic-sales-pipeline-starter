@@ -13,7 +13,7 @@ This repository is the starter project for the hands-on workshop. **Workshop lab
 | **Setup** ([README](README.md)) | Fork, clone, `.venv`, test push | Your own GitHub repo for Cloud Agents |
 | **1** | Dockerfile + `environment.json`, secrets | Reproducible Cloud Agent environment |
 | **2** | Run failing tests → `AGENTS.md` → Cloud Agent → review & merge PR | Agent context, draft PRs, human verification |
-| **3** | PR review Automation → Cloud Agent adds Streamlit app → mark PR ready | Event-driven agents; Automations vs Bugbot vs CI |
+| **3** | PR review+fix Automation → Cloud Agent adds Streamlit → mark ready → optional fix draft PR | Agent-as-reviewer pattern; custom Automation vs Bugbot/Approval Agents |
 
 **After the lab:** [WORKFLOW_RECIPES.md](WORKFLOW_RECIPES.md) — agent workflow framework (deterministic gates vs probabilistic agents) and **example** recipes in [`examples/`](examples/) (not implemented in the lab)—from check scripts through GitHub CI and ticket-driven Cloud Agents.
 

@@ -13,9 +13,23 @@ Everything under [`examples/`](examples/) is **starter / vanilla reference mater
 | **Agents run scripts; they don't replace them** | Put linters, tests, and checks in deterministic scripts or CI. The agent's job is to run them and react to output. |
 | **Agents are probabilistic; gates are deterministic** | Don't ask an agent "is this correct?" when `pytest` or `ruff` can answer definitively. |
 | **ReAct loop** | **Act** (run check) → **Observe** (stdout, exit code) → **Reason** (what to fix) → repeat until green. |
-| **Escalating cost** | Cheap linters → tests → **fresh agent review (expensive)** → **human merge**. Run the cheapest gate that can fail first. |
-| **Don't review your own work** | Use a separate agent context (sub-agent) for code review—the same pattern as human PR review. Sub-agent review costs extra time and model usage; use it last among automated gates, or skip with `--quick` while adopting. |
+| **Escalating cost** | Cheap linters → tests → **fresh-context final review (expensive)** → **human merge**. Run the cheapest gate that can fail first. |
+| **Separate implementer from final reviewer** | Just as a colleague with fresh eyes catches what you missed, an agent benefits when **another agent with fresh context** reviews the finished diff—not the same run that wrote the code. Humans and agents both review and iterate **while** building (editing, running tests, fixing); this principle is about the **final** critique before merge: sub-agent, PR Automation, Bugbot, Approval Agents, or human PR review. Fresh-context review costs extra time and model usage; use it last among automated gates, or skip with `--quick` while adopting. |
 | **Humans keep merge authority** | Automate the inner loop; a person still approves the PR. |
+
+### Intentional gates—not the only way
+
+The recipes below are **one adoption path**, not a mandatory stack. Teams pick surfaces that match their maturity: pytest in `AGENTS.md` only, or check scripts, or CI, or PR Automations—or combinations. The **core idea** the lab is teaching:
+
+1. **Implementation agent** does the work (Cloud Agent, local agent, etc.).
+2. **Deterministic gates** (linters, tests, CI) catch objective failures cheaply.
+3. **Fresh-context final review** critiques the diff before merge—another agent (or reviewer), not the one that wrote the code. Incremental self-review while implementing is expected; this step is the deliberate **final** pass.
+
+That third step is the main payoff of Recipe 5 and the `/commit-code` sub-agent step in Recipe 3. Research and practice show that a **reflection** or **critique** pass—stepping back from the implementation trace—often improves quality. You are wiring that into the workflow on purpose.
+
+**How this relates to ReAct:** The implementation loop is classic ReAct against **tools**: **Act** (edit code, run pytest) → **Observe** (failures, exit codes) → **Reason** (what to fix) → repeat. Fresh-context review is a **second loop**: the reviewer **observes** the finished diff (and optionally test/CI status) and **reasons** about correctness, scope, and risks—without carrying the implementation agent's chain-of-thought. It is not a substitute for pytest; it catches different things (design fit, subtle logic, scope creep). Use both.
+
+You can place the reflection step locally (slash command sub-agent), on the PR (Automation), or both. The lab uses PR Automations because it is event-driven and easy to demo after human **Ready for review**.
 
 ### Target inner loop
 
@@ -23,7 +37,7 @@ Everything under [`examples/`](examples/) is **starter / vanilla reference mater
 Agent implements
   → cheap CI (linters, formatters)
   → tests (pytest, smoke)
-  → fresh agent review (optional, expensive)
+  → fresh-context final review (optional, expensive)
 → human review → merge
 ```
 
@@ -106,14 +120,29 @@ Run the **same** check script on every push/PR so GitHub is the source of truth 
 
 ---
 
-### Recipe 5 — PR review Automation *(lab: Part 3)*
+### Recipe 5 — PR review (+ fix) Automation *(lab: Part 3)*
 
-Event-driven **agent review** on GitHub after a human marks a draft PR **Ready for review**.
+Event-driven **agent review** on GitHub after a human marks a draft PR **Ready for review**. Optionally fixes **blocking errors** in a **new draft PR**—so the automation does not immediately re-fire.
 
 - **In lab:** Part 3 hands-on
 - **Example instructions:** [`examples/automations/pr-review-instructions.md`](examples/automations/pr-review-instructions.md)
 
+**Trigger:** **Pull request opened** only—not **Draft opened**. Implementation PRs and fix PRs stay drafts until a human marks them ready.
+
+**Loop prevention:** Fix **blocking errors** only (not every suggestion). Opening fix PRs as **drafts** plus ready-only triggers avoids most recursion; asking the agent to fix all suggestions on draft-opened triggers can loop indefinitely.
+
 **Position in the stack:** After deterministic CI/tests. Agent review is **expensive**—don't use it as a substitute for linters or pytest. Compare with **Bugbot** (product default) vs your custom checklist (Automations).
+
+**What this recipe is really teaching:** **Separate implementer from final reviewer**—implementation agent and review agent are separate runs. That reflection step is intentional; see [Intentional gates—not the only way](#intentional-gatesnot-the-only-way) in the core framework. Draft vs ready triggers and blocking-only fixes are **engineering choices** to make automation safe, not requirements for every team.
+
+**Provider-native review vs custom Automations:** The pattern—**agent as reviewer**, triggered on PR events—is universal. Vendors are productizing it. On Cursor, for example, **Bugbot** and **Approval Agents** are dedicated review features; **Automations** let you roll your own checklist and fix behavior. Other AI coding tools offer similar built-ins.
+
+| Approach | When to use |
+|----------|-------------|
+| **Provider feature** (e.g. Bugbot, Approval Agents) | Default for production—better integration, maintained by the vendor, less prompt engineering |
+| **Custom Automation** (this recipe) | Teach the portable pattern; encode **your** team's checklist; combine review + fix exactly how you want |
+
+**Recommendation:** Explore your provider's dedicated review features first. For Cursor teams, Bugbot is an excellent production choice. The lab uses a **custom Automation on purpose** so you learn the general workflow—not because custom is always better, and not to imply Bugbot is the only or uniquely special option. After the workshop, try both and pick what fits your team.
 
 ---
 
