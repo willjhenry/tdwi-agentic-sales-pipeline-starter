@@ -9,7 +9,26 @@ def get_data():
     return load_and_clean_data()
 
 
+def normalize_date_range(start_date, end_date):
+    if start_date > end_date:
+        start_date, end_date = end_date, start_date
+    return start_date, end_date
+
+
+def parse_date_range(date_range, min_date, max_date):
+    if isinstance(date_range, tuple):
+        if len(date_range) == 2:
+            return date_range[0], date_range[1]
+        if len(date_range) == 1:
+            return date_range[0], date_range[0]
+        return min_date, max_date
+    if date_range is None:
+        return min_date, max_date
+    return date_range, date_range
+
+
 def apply_filters(df, start_date, end_date, products, customer_id):
+    start_date, end_date = normalize_date_range(start_date, end_date)
     mask = (df["date"].dt.date >= start_date) & (df["date"].dt.date <= end_date)
     mask &= df["product"].isin(products)
     if customer_id is not None:
@@ -49,10 +68,7 @@ def main():
                 st.warning("Customer ID must be a number.")
                 customer_id_valid = False
 
-    if isinstance(date_range, tuple) and len(date_range) == 2:
-        start_date, end_date = date_range
-    else:
-        start_date = end_date = date_range
+    start_date, end_date = parse_date_range(date_range, min_date, max_date)
 
     if customer_id_valid:
         filtered = apply_filters(df, start_date, end_date, products, customer_id)
