@@ -1,6 +1,5 @@
 # streamlit run revenue_explorer.py
 import streamlit as st
-import pandas as pd
 
 from generate_sales_report import load_and_clean_data
 
@@ -12,8 +11,7 @@ def get_data():
 
 def apply_filters(df, start_date, end_date, products, customer_id):
     mask = (df["date"].dt.date >= start_date) & (df["date"].dt.date <= end_date)
-    if products:
-        mask &= df["product"].isin(products)
+    mask &= df["product"].isin(products)
     if customer_id is not None:
         mask &= df["customer_id"] == customer_id
     return df[mask]
@@ -41,18 +39,23 @@ def main():
         )
         customer_input = st.text_input("Customer ID (optional)", value="")
         customer_id = None
+        customer_id_valid = True
         if customer_input.strip():
             try:
                 customer_id = int(customer_input.strip())
             except ValueError:
                 st.warning("Customer ID must be a number.")
+                customer_id_valid = False
 
     if isinstance(date_range, tuple) and len(date_range) == 2:
         start_date, end_date = date_range
     else:
         start_date = end_date = date_range
 
-    filtered = apply_filters(df, start_date, end_date, products, customer_id)
+    if customer_id_valid:
+        filtered = apply_filters(df, start_date, end_date, products, customer_id)
+    else:
+        filtered = df.iloc[0:0]
 
     col1, col2, col3 = st.columns(3)
     col1.metric("Total Revenue", f"${filtered['revenue'].sum():,.2f}")
