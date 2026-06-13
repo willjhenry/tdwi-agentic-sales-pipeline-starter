@@ -1,6 +1,11 @@
+import matplotlib
+
+matplotlib.use("Agg")
+
 import pytest
 import pandas as pd
 from generate_sales_report import (
+    create_chart,
     load_and_clean_data,
     generate_metrics,
 )
@@ -37,3 +42,9 @@ def test_date_column_is_datetime(cleaned_df):
     assert pd.api.types.is_datetime64_any_dtype(cleaned_df["date"]), (
         "Date column must be datetime"
     )
+
+
+def test_create_chart_with_datetime_dates(cleaned_df, tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    create_chart(cleaned_df)
+    assert (tmp_path / "report.png").exists()

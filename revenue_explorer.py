@@ -1,7 +1,7 @@
 # streamlit run revenue_explorer.py
 import streamlit as st
 
-from generate_sales_report import load_and_clean_data
+from generate_sales_report import daily_revenue, load_and_clean_data
 
 
 @st.cache_data
@@ -86,8 +86,7 @@ def main():
         st.info("No data matches the selected filters.")
     else:
         daily = (
-            filtered.groupby(filtered["date"].dt.date)["revenue"]
-            .sum()
+            daily_revenue(filtered)
             .reset_index()
             .rename(columns={"date": "Date", "revenue": "Revenue"})
         )
