@@ -16,7 +16,7 @@ def normalize_date_range(start_date, end_date):
 
 
 def parse_date_range(date_range, min_date, max_date):
-    if isinstance(date_range, tuple):
+    if isinstance(date_range, (tuple, list)):
         if len(date_range) == 2:
             return normalize_date_range(date_range[0], date_range[1])
         if len(date_range) == 1:
@@ -81,14 +81,22 @@ def main():
         filtered = df.iloc[0:0]
 
     col1, col2, col3 = st.columns(3)
-    col1.metric("Total Revenue", f"${filtered['revenue'].sum():,.2f}")
-    col2.metric("Order Count", f"{len(filtered):,}")
-    avg_order = filtered["revenue"].mean() if len(filtered) > 0 else 0.0
-    col3.metric("Average Order Value", f"${avg_order:,.2f}")
+    if not customer_id_valid:
+        col1.metric("Total Revenue", "—")
+        col2.metric("Order Count", "—")
+        col3.metric("Average Order Value", "—")
+        st.error("Enter a numeric Customer ID or clear the field to see results.")
+    else:
+        col1.metric("Total Revenue", f"${filtered['revenue'].sum():,.2f}")
+        col2.metric("Order Count", f"{len(filtered):,}")
+        avg_order = filtered["revenue"].mean() if len(filtered) > 0 else 0.0
+        col3.metric("Average Order Value", f"${avg_order:,.2f}")
 
     st.subheader("Daily Revenue Trend")
     if not customer_id_valid:
-        st.error("Enter a numeric Customer ID or clear the field to see results.")
+        pass
+    elif not products:
+        st.info("Select at least one product to see results.")
     elif filtered.empty:
         st.info("No data matches the selected filters.")
     else:
