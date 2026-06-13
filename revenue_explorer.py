@@ -37,6 +37,8 @@ def main():
             options=sorted(df["product"].unique()),
             default=sorted(df["product"].unique()),
         )
+        if not products:
+            st.warning("Select at least one product.")
         customer_input = st.text_input("Customer ID (optional)", value="")
         customer_id = None
         customer_id_valid = True
