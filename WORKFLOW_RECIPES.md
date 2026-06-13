@@ -12,10 +12,43 @@ Everything under [`examples/`](examples/) is **starter / vanilla reference mater
 |-----------|----------------|
 | **Agents run scripts; they don't replace them** | Put linters, tests, and checks in deterministic scripts or CI. The agent's job is to run them and react to output. |
 | **Agents are probabilistic; gates are deterministic** | Don't ask an agent "is this correct?" when `pytest` or `ruff` can answer definitively. |
-| **ReAct loop** | **Act** (run check) → **Observe** (stdout, exit code) → **Reason** (what to fix) → repeat until green. |
+| **ReAct loop** | **Act** (edit, run tool) → **Observe** (output) → **Reason** (what next) → repeat. Modern **agent harnesses** (Cursor, Claude Code, etc.) orchestrate much of this for you—you rarely build the loop yourself. See [Harness vs team workflow](#harness-vs-team-workflow) below. |
 | **Escalating cost** | Cheap linters → tests → **fresh-context final review (expensive)** → **human merge**. Run the cheapest gate that can fail first. |
 | **Separate implementer from final reviewer** | Just as a colleague with fresh eyes catches what you missed, an agent benefits when **another agent with fresh context** reviews the finished diff—not the same run that wrote the code. Humans and agents both review and iterate **while** building (editing, running tests, fixing); this principle is about the **final** critique before merge: sub-agent, PR Automation, Bugbot, Approval Agents, or human PR review. Fresh-context review costs extra time and model usage; use it last among automated gates, or skip with `--quick` while adopting. |
 | **Humans keep merge authority** | Automate the inner loop; a person still approves the PR. |
+
+### Harness vs team workflow
+
+Modern coding agents are **model + harness**: the product wires tools, prompts, and orchestration. You experience much of the “agentic” behavior through that harness—not by implementing ReAct yourself.
+
+**What the harness often does for you** (you’ll see these called out in the UI while the agent runs—e.g. “Planning…”, tool names, subagent launches):
+
+| Harness step | What you may see | Examples |
+|--------------|------------------|----------|
+| **Planning** | An explicit plan or todo list before edits | Cursor Plan mode; Claude Code plan subagent; frontier models (e.g. Claude Fable) on long tasks |
+| **Explore** | Search/read codebase, gather context | Built-in explore subagents, grep, semantic search |
+| **Act** | Edit files, run terminal, call APIs | Write, Bash, MCP tools |
+| **Observe** | Read test output, linter errors, command stdout | Agent reacts to tool results in the same session |
+| **Delegate** | Spin up subagents with fresh context | Cursor Task/explore/bash; Claude Code subagents |
+| **Reflect** | Self-check or revise before finishing | Increasingly built in; not a substitute for separate final review |
+
+Products differ—Cursor, Claude Code, Copilot, and others expose different steps—but **planning** in particular is now explicit in many UIs. When you watch an agent “think,” you are often seeing the harness walk through these phases.
+
+**What teams still wire explicitly** (what this lab and recipes focus on):
+
+| Team layer | Why it still matters |
+|------------|---------------------|
+| **`AGENTS.md`, rules, prompts** | Repo policy and definition of done—the harness won’t infer your team’s standards |
+| **Deterministic gates** (pytest, CI, linters) | Agents don’t always run checks reliably without encoding them; CI catches slips |
+| **PR handoffs** (draft → ready, Automations) | Accountability and event-driven review on **your** process |
+| **Fresh-context final review** | Bugbot, Approval Agents, PR Automations, human merge—separate from in-session self-check |
+
+```text
+Harness (product):     plan → explore → edit/run tools → observe → (delegate | reflect) → …
+Team workflow (you):   AGENTS.md + gates + draft PR + final reviewer + human merge
+```
+
+You usually **don’t** build the inner tool loop. You **do** design reliability and accountability around probabilistic agents.
 
 ### Intentional gates—not the only way
 
@@ -27,7 +60,7 @@ The recipes below are **one adoption path**, not a mandatory stack. Teams pick s
 
 That third step is the main payoff of Recipe 5 and the `/commit-code` sub-agent step in Recipe 3. Research and practice show that a **reflection** or **critique** pass—stepping back from the implementation trace—often improves quality. You are wiring that into the workflow on purpose.
 
-**How this relates to ReAct:** The implementation loop is classic ReAct against **tools**: **Act** (edit code, run pytest) → **Observe** (failures, exit codes) → **Reason** (what to fix) → repeat. Fresh-context review is a **second loop**: the reviewer **observes** the finished diff (and optionally test/CI status) and **reasons** about correctness, scope, and risks—without carrying the implementation agent's chain-of-thought. It is not a substitute for pytest; it catches different things (design fit, subtle logic, scope creep). Use both.
+**How this relates to ReAct and the harness:** The harness runs the **inner** tool loop (plan → act → observe → reason, often with subagents). Recipe 2 (`AGENTS.md` + pytest) and Recipe 4 (CI) add **team gates** on top—because harness defaults ≠ your definition of done. **Fresh-context final review** is a **second loop** after implementation: the reviewer observes the finished diff (and optionally CI status) without the implementer’s chain-of-thought. It complements in-session reflection; it does not replace pytest. See [Harness vs team workflow](#harness-vs-team-workflow).
 
 You can place the reflection step locally (slash command sub-agent), on the PR (Automation), or both. The lab uses PR Automations because it is event-driven and easy to demo after human **Ready for review**.
 
