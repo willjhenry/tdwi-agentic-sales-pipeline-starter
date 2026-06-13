@@ -86,6 +86,10 @@ def main():
         col2.metric("Order Count", "—")
         col3.metric("Average Order Value", "—")
         st.error("Enter a numeric Customer ID or clear the field to see results.")
+    elif not products:
+        col1.metric("Total Revenue", "—")
+        col2.metric("Order Count", "—")
+        col3.metric("Average Order Value", "—")
     else:
         col1.metric("Total Revenue", f"${filtered['revenue'].sum():,.2f}")
         col2.metric("Order Count", f"{len(filtered):,}")
