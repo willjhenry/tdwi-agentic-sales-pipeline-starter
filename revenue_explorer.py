@@ -26,8 +26,11 @@ def parse_date_range(date_range, min_date, max_date):
 def parse_customer_id(customer_id_input):
     customer_id_input = customer_id_input.strip()
     if not customer_id_input:
-        return None
-    return int(customer_id_input)
+        return None, None
+    try:
+        return int(customer_id_input), None
+    except ValueError:
+        return None, "Customer ID must be a whole number."
 
 
 def render_sidebar(df):
@@ -52,7 +55,9 @@ def render_sidebar(df):
     customer_id_input = st.sidebar.text_input("Customer ID (optional)", value="")
 
     start_date, end_date = parse_date_range(date_range, min_date, max_date)
-    customer_id = parse_customer_id(customer_id_input)
+    customer_id, customer_id_error = parse_customer_id(customer_id_input)
+    if customer_id_error:
+        st.error(customer_id_error)
 
     return filter_sales_data(
         df,

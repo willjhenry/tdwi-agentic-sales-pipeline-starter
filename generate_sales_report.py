@@ -19,7 +19,7 @@ def filter_sales_data(df, start_date=None, end_date=None, products=None, custome
         filtered = filtered[filtered["date"].dt.date >= start_date]
     if end_date is not None:
         filtered = filtered[filtered["date"].dt.date <= end_date]
-    if products:
+    if products is not None:
         filtered = filtered[filtered["product"].isin(products)]
     if customer_id is not None:
         filtered = filtered[filtered["customer_id"] == customer_id]
