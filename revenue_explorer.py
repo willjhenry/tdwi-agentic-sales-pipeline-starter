@@ -18,7 +18,7 @@ def normalize_date_range(start_date, end_date):
 def parse_date_range(date_range, min_date, max_date):
     if isinstance(date_range, tuple):
         if len(date_range) == 2:
-            return date_range[0], date_range[1]
+            return normalize_date_range(date_range[0], date_range[1])
         if len(date_range) == 1:
             return date_range[0], date_range[0]
         return min_date, max_date
@@ -87,7 +87,9 @@ def main():
     col3.metric("Average Order Value", f"${avg_order:,.2f}")
 
     st.subheader("Daily Revenue Trend")
-    if filtered.empty:
+    if not customer_id_valid:
+        st.error("Enter a numeric Customer ID or clear the field to see results.")
+    elif filtered.empty:
         st.info("No data matches the selected filters.")
     else:
         daily = (

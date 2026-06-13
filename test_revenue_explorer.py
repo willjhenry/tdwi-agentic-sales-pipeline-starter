@@ -65,6 +65,15 @@ def test_parse_date_range_handles_single_date_object():
     assert parse_date_range(single, min_date, max_date) == (single, single)
 
 
+def test_parse_date_range_normalizes_inverted_two_tuple():
+    min_date = date(2024, 1, 1)
+    max_date = date(2024, 3, 15)
+    assert parse_date_range((date(2024, 3, 15), date(2024, 1, 1)), min_date, max_date) == (
+        date(2024, 1, 1),
+        date(2024, 3, 15),
+    )
+
+
 def test_parse_customer_id_empty_returns_none_and_valid():
     assert parse_customer_id("") == (None, True)
     assert parse_customer_id("   ") == (None, True)
