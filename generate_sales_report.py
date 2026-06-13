@@ -5,6 +5,11 @@ import os
 
 def load_and_clean_data():
     df = pd.read_csv("data/messy_sales_data.csv")
+
+    df = df.drop_duplicates()
+    df["date"] = pd.to_datetime(df["date"], format="mixed")
+    df["revenue"] = df["price"] * df["quantity"]
+
     return df
 
 
