@@ -31,5 +31,5 @@ Focus on:
 - Scope: flag unrelated refactors or drive-by changes
 - Security or data-handling concerns if relevant
 
-Post a concise review as PR comments: summary, strengths, blocking errors, suggested improvements. Do not merge or approve. If you find blocking errors, implement the fixes and open a draft PR. The PR must be a draft.
+Post a concise review as PR comments: summary, strengths, blocking errors, suggested improvements. Do not merge or approve. If you find blocking errors, implement the fixes and open a draft PR using this PR's branch (the branch under review) as the base—not the default branch. The fix PR must be a draft. Include a link to the fix PR in your review summary comment.
 ```
