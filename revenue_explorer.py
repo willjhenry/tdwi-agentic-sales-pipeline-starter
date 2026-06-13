@@ -27,6 +27,16 @@ def parse_date_range(date_range, min_date, max_date):
     return date_range, date_range
 
 
+def parse_customer_id(customer_input):
+    text = customer_input.strip()
+    if not text:
+        return None, True
+    try:
+        return int(text), True
+    except ValueError:
+        return None, False
+
+
 def apply_filters(df, start_date, end_date, products, customer_id):
     start_date, end_date = normalize_date_range(start_date, end_date)
     mask = (df["date"].dt.date >= start_date) & (df["date"].dt.date <= end_date)
@@ -59,14 +69,9 @@ def main():
         if not products:
             st.warning("Select at least one product.")
         customer_input = st.text_input("Customer ID (optional)", value="")
-        customer_id = None
-        customer_id_valid = True
-        if customer_input.strip():
-            try:
-                customer_id = int(customer_input.strip())
-            except ValueError:
-                st.warning("Customer ID must be a number.")
-                customer_id_valid = False
+        customer_id, customer_id_valid = parse_customer_id(customer_input)
+        if not customer_id_valid:
+            st.warning("Customer ID must be a number.")
 
     start_date, end_date = parse_date_range(date_range, min_date, max_date)
 

@@ -3,7 +3,12 @@ import pytest
 from datetime import date
 
 from generate_sales_report import load_and_clean_data
-from revenue_explorer import apply_filters, normalize_date_range, parse_date_range
+from revenue_explorer import (
+    apply_filters,
+    normalize_date_range,
+    parse_customer_id,
+    parse_date_range,
+)
 
 
 @pytest.fixture
@@ -51,6 +56,26 @@ def test_parse_date_range_handles_partial_selection():
         date(2024, 2, 1),
     )
     assert parse_date_range((), min_date, max_date) == (min_date, max_date)
+
+
+def test_parse_date_range_handles_single_date_object():
+    min_date = date(2024, 1, 1)
+    max_date = date(2024, 3, 15)
+    single = date(2024, 2, 10)
+    assert parse_date_range(single, min_date, max_date) == (single, single)
+
+
+def test_parse_customer_id_empty_returns_none_and_valid():
+    assert parse_customer_id("") == (None, True)
+    assert parse_customer_id("   ") == (None, True)
+
+
+def test_parse_customer_id_valid_integer():
+    assert parse_customer_id("42") == (42, True)
+
+
+def test_parse_customer_id_invalid_returns_not_valid():
+    assert parse_customer_id("abc") == (None, False)
 
 
 def test_apply_filters_inverted_dates_match_ordered_range(cleaned_df):
