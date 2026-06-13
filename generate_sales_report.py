@@ -13,16 +13,41 @@ def load_and_clean_data():
     return df
 
 
-def generate_metrics(df):
+def filter_sales_data(df, start_date=None, end_date=None, products=None, customer_id=None):
+    filtered = df
+    if start_date is not None:
+        filtered = filtered[filtered["date"].dt.date >= start_date]
+    if end_date is not None:
+        filtered = filtered[filtered["date"].dt.date <= end_date]
+    if products:
+        filtered = filtered[filtered["product"].isin(products)]
+    if customer_id is not None:
+        filtered = filtered[filtered["customer_id"] == customer_id]
+    return filtered
+
+
+def compute_kpis(df):
+    if df.empty:
+        return 0.0, 0, 0.0
     total_revenue = df["revenue"].sum()
-    top_customers = df.groupby("customer_id")["revenue"].sum().nlargest(5)
+    order_count = len(df)
     avg_order_value = df["revenue"].mean()
+    return total_revenue, order_count, avg_order_value
+
+
+def daily_revenue_series(df):
+    return df.groupby(df["date"].dt.date)["revenue"].sum().sort_index()
+
+
+def generate_metrics(df):
+    total_revenue, _, avg_order_value = compute_kpis(df)
+    top_customers = df.groupby("customer_id")["revenue"].sum().nlargest(5)
     return total_revenue, top_customers, avg_order_value
 
 
 def create_chart(df):
     plt.figure(figsize=(10, 6))
-    daily_revenue = df.groupby(df["date"].dt.date)["revenue"].sum()
+    daily_revenue = daily_revenue_series(df)
     daily_revenue.plot(kind="bar")
     plt.title("Daily Revenue Trend")
     plt.xlabel("Date")
