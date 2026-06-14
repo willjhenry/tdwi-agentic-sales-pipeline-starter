@@ -228,4 +228,4 @@ Take small steps. Adjust prompts and gates based on what fails in practice.
 |------|-------------------|
 | **Part 1** | Reproducible Cloud environment (same checks can run in the agent VM when you adopt them) |
 | **Part 2** | Recipe 2 + human local verify before merge |
-| **Part 3** | Recipes 1 + 5 — `check.sh`, merge PRs in order, wire gates (prompt / `AGENTS.md` / hooks); Automations vs Bugbot vs CI discussion |
+| **Part 3** | Recipes 1 + 5 — `check.sh`, merge stacked PRs newest-first, wire gates (prompt / `AGENTS.md` / hooks); Automations vs Bugbot vs CI discussion |
