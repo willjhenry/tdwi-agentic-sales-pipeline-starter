@@ -62,7 +62,7 @@ That third step is the main payoff of Recipe 5 and the `/commit-code` sub-agent 
 
 **How this relates to ReAct and the harness:** The harness runs the **inner** tool loop (plan → act → observe → reason, often with subagents). Recipe 2 (`AGENTS.md` + pytest) and Recipe 4 (CI) add **team gates** on top—because harness defaults ≠ your definition of done. **Fresh-context final review** is a **second loop** after implementation: the reviewer observes the finished diff (and optionally CI status) without the implementer’s chain-of-thought. It complements in-session reflection; it does not replace pytest. See [Harness vs team workflow](#harness-vs-team-workflow).
 
-You can place the reflection step locally (slash command sub-agent), on the PR (Automation), or both. The lab uses PR Automations because it is event-driven and easy to demo after human **Ready for review**.
+You can place the reflection step locally (slash command sub-agent), before the PR (Cloud Agent golden prompt—Part 3 Step 9), on the PR (Automation), or both. Part 3 demos **sub-agent before PR** and **Automation after ready**.
 
 ### Target inner loop
 
@@ -96,7 +96,7 @@ Implementation details depend on your stack and AI tool (Cursor, Copilot, Claude
 
 **One entry point** for humans and agents. Same command on Mac, Linux, Windows (Git Bash), and Cloud Agent Linux.
 
-- **In lab (Part 3, Step 8):** Students create [`scripts/check.sh`](scripts/check.sh) at the repo root—a minimal starter with `pip install --dry-run`, commented extension points (e.g. ruff), and `pytest`. Motivated by real agent mistakes (e.g. Streamlit pins incompatible with pinned pandas). Step 9 wires it into prompts, `AGENTS.md`, and hooks; Step 10 demos a fix pass (with the caveat that checks belong on **every** agent run, not a separate Cloud Agent only).
+- **In lab (Part 3, Step 8):** Students create [`scripts/check.sh`](scripts/check.sh) at the repo root—a minimal starter with `pip install --dry-run`, commented extension points (e.g. ruff), and `pytest`. Motivated by real agent mistakes (e.g. Streamlit pins incompatible with pinned pandas). Step 9 wires it into prompts, `AGENTS.md`, and hooks; Step 10 demos a fix pass (with the caveat that checks belong on **every** agent run, not a separate Cloud Agent only). **Step 11** repeats the review-and-merge loop on the fix PR, then confirms a working Streamlit app on `main`.
 - **Part 2:** Students still use `python -m pytest test_sales_report.py` via `AGENTS.md` (Recipe 2) before Part 3 adds the script.
 - **Post-lab:** Copy and grow [`examples/scripts/check.py`](examples/scripts/check.py) (Python entry point, more extension points) or extend your lab `check.sh`.
 
@@ -153,29 +153,31 @@ Run the **same** check script on every push/PR so GitHub is the source of truth 
 
 ---
 
-### Recipe 5 — PR review (+ fix) Automation *(lab: Part 3)*
+### Recipe 5 — PR review Automation *(lab: Part 3)*
 
-Event-driven **agent review** on GitHub after a human marks a draft PR **Ready for review**. Optionally fixes **blocking errors** in a **new draft PR**—so the automation does not immediately re-fire.
+Event-driven **agent review** on GitHub after a human marks a draft PR **Ready for review**. The lab uses **comments only** (Bugbot-like); a **second Cloud Agent** implements fixes on the same branch (Step 6b).
 
 - **In lab:** Part 3 hands-on
 - **Example instructions:** [`examples/automations/pr-review-instructions.md`](examples/automations/pr-review-instructions.md)
 
-**Trigger:** **Pull request opened** only—not **Draft opened**. Implementation PRs and fix PRs stay drafts until a human marks them ready.
+**Trigger:** **Pull request opened** only—not **Draft opened**.
 
-**Loop prevention:** Fix **blocking errors** only (not every suggestion). Opening fix PRs as **drafts** plus ready-only triggers avoids most recursion; asking the agent to fix all suggestions on draft-opened triggers can loop indefinitely.
+**Lab pattern:** Automation posts review comments → optional implementer Cloud Agent reads **PR #N** and pushes to the same branch → human merges one PR to `main`.
+
+**Why not auto-fix PRs in the lab?** Agents often open fix PRs against the wrong base; stacked merges and ready-to-merge re-fires add GitHub complexity. Debrief covers this; production teams often use **Bugbot** + **`/babysit`** or comments + separate implementer.
 
 **Position in the stack:** After deterministic CI/tests. Agent review is **expensive**—don't use it as a substitute for linters or pytest. Compare with **Bugbot** (product default) vs your custom checklist (Automations).
 
-**What this recipe is really teaching:** **Separate implementer from final reviewer**—implementation agent and review agent are separate runs. That reflection step is intentional; see [Intentional gates—not the only way](#intentional-gatesnot-the-only-way) in the core framework. Draft vs ready triggers and blocking-only fixes are **engineering choices** to make automation safe, not requirements for every team.
+**What this recipe is really teaching:** **Separate implementer from final reviewer**—implementation agent, review automation, and fix agent are separate runs. Sub-agent review *before* the PR (Step 9 golden prompt) is the inner loop; PR Automation is the outer loop.
 
-**Provider-native review vs custom Automations:** The pattern—**agent as reviewer**, triggered on PR events—is universal. Vendors are productizing it. On Cursor, for example, **Bugbot** and **Approval Agents** are dedicated review features; **Automations** let you roll your own checklist and fix behavior. Other AI coding tools offer similar built-ins.
+**Provider-native review vs custom Automations:** The pattern—**agent as reviewer**, triggered on PR events—is universal. Vendors are productizing it (**Bugbot**, **Approval Agents**, **`/babysit`**). Review and experiment with product features as you build your workflow.
 
 | Approach | When to use |
 |----------|-------------|
-| **Provider feature** (e.g. Bugbot, Approval Agents) | Default for production—better integration, maintained by the vendor, less prompt engineering |
-| **Custom Automation** (this recipe) | Teach the portable pattern; encode **your** team's checklist; combine review + fix exactly how you want |
+| **Provider feature** (e.g. Bugbot, Approval Agents, `/babysit`) | Default for production—better integration, maintained by the vendor |
+| **Custom Automation** (this recipe) | Teach the portable pattern; encode **your** team's checklist |
 
-**Recommendation:** Explore your provider's dedicated review features first. For Cursor teams, Bugbot is an excellent production choice. The lab uses a **custom Automation on purpose** so you learn the general workflow—not because custom is always better, and not to imply Bugbot is the only or uniquely special option. After the workshop, try both and pick what fits your team.
+**Recommendation:** Explore your provider's dedicated review features first. The lab uses a **custom Automation on purpose** so you learn the general workflow—not because custom is always better.
 
 ---
 
@@ -228,4 +230,4 @@ Take small steps. Adjust prompts and gates based on what fails in practice.
 |------|-------------------|
 | **Part 1** | Reproducible Cloud environment (same checks can run in the agent VM when you adopt them) |
 | **Part 2** | Recipe 2 + human local verify before merge |
-| **Part 3** | Recipes 1 + 5 — `check.sh`, merge stacked PRs newest-first, wire gates (prompt / `AGENTS.md` / hooks); Automations vs Bugbot vs CI discussion |
+| **Part 3** | Recipes 1 + 5 — comments-only Automation, Step 6b fix agent, `check.sh`, sub-agent golden prompt; Bugbot / babysit discussion |
