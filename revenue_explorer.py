@@ -17,7 +17,8 @@ def get_sales_data():
 
 def parse_date_range(date_range, min_date, max_date):
     if isinstance(date_range, tuple) and len(date_range) == 2:
-        return date_range
+        start_date, end_date = date_range
+        return min(start_date, end_date), max(start_date, end_date)
     if hasattr(date_range, "year"):
         return date_range, date_range
     return min_date, max_date
@@ -58,6 +59,7 @@ def render_sidebar(df):
     customer_id, customer_id_error = parse_customer_id(customer_id_input)
     if customer_id_error:
         st.error(customer_id_error)
+        return df.head(0)
 
     return filter_sales_data(
         df,

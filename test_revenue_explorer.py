@@ -40,3 +40,11 @@ def test_parse_date_range_single_date():
     start, end = parse_date_range(single_date, single_date, single_date)
     assert start == single_date
     assert end == single_date
+
+
+def test_parse_date_range_normalizes_inverted_range():
+    early = pd.Timestamp("2024-01-01").date()
+    late = pd.Timestamp("2024-01-31").date()
+    start, end = parse_date_range((late, early), early, late)
+    assert start == early
+    assert end == late
