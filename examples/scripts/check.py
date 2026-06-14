@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-EXAMPLE ONLY — not used in the TDWI lab workshop.
+EXAMPLE ONLY — not shipped on upstream main.
 
-Starter template for a deterministic pre-push / CI check script.
-The lab uses Recipe 2 (pytest via AGENTS.md) instead.
+Fuller post-lab template for a deterministic pre-push / CI check script.
+Part 3 introduces a minimal scripts/check.sh (pip dry-run + pytest); Part 2 uses pytest via AGENTS.md before that.
 
 When adopting (Recipe 1):
   1. Copy this file to scripts/check.py at your repo root.

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# EXAMPLE ONLY — not used in the TDWI lab workshop.
+# EXAMPLE ONLY — not shipped on upstream main (Part 3 lab creates a simpler scripts/check.sh).
 #
 # Unix wrapper for the check script (Mac, Linux, Cloud Agent VM, Git Bash on Windows).
 #

@@ -4,7 +4,7 @@ This repository is the starter project for the hands-on workshop. **Workshop lab
 
 - Part 1 (Cloud Agent environment setup): [`LAB3-Part-1-Cloud-Agent-Environment-Setup.ipynb`](LAB3-Part-1-Cloud-Agent-Environment-Setup.ipynb)
 - Part 2 (fix pipeline with Cloud Agent): [`LAB3-Part-2-Running-Cursor-Cloud-Agents.ipynb`](LAB3-Part-2-Running-Cursor-Cloud-Agents.ipynb)
-- Part 3 (PR review automations, Revenue Explorer): [`LAB3-Part-3-Automations.ipynb`](LAB3-Part-3-Automations.ipynb)
+- Part 3 (PR review automations, Revenue Explorer, `check.sh`): [`LAB3-Part-3-Automations.ipynb`](LAB3-Part-3-Automations.ipynb)
 
 ### Lab map
 
@@ -13,9 +13,9 @@ This repository is the starter project for the hands-on workshop. **Workshop lab
 | **Setup** ([README](README.md)) | Fork, clone, `.venv`, test push | Your own GitHub repo for Cloud Agents |
 | **1** | Dockerfile + `environment.json`, secrets | Reproducible Cloud Agent environment |
 | **2** | Run failing tests → `AGENTS.md` → Cloud Agent → review & merge PR | Agent context, draft PRs, human verification |
-| **3** | PR review+fix Automation → Cloud Agent adds Streamlit → mark ready → optional fix draft PR | Agent-as-reviewer pattern; custom Automation vs Bugbot/Approval Agents |
+| **3** | PR review+fix Automation → Cloud Agent adds Streamlit → mark ready → merge PRs → `scripts/check.sh` | Agent-as-reviewer pattern; deterministic gates (pip dry-run + pytest); wire checks via prompt, `AGENTS.md`, hooks |
 
-**After the lab:** [WORKFLOW_RECIPES.md](WORKFLOW_RECIPES.md) — agent workflow framework (deterministic gates vs probabilistic agents) and **example** recipes in [`examples/`](examples/) (not implemented in the lab)—from check scripts through GitHub CI and ticket-driven Cloud Agents.
+**After the lab:** [WORKFLOW_RECIPES.md](WORKFLOW_RECIPES.md) — agent workflow framework (deterministic gates vs probabilistic agents) and **example** recipes in [`examples/`](examples/) for post-lab adoption (fuller check script, GitHub CI, ticket-driven Cloud Agents).
 
 Follow the steps below to fork, clone, and verify you can push to your own copy on GitHub. There are two benefits of forking:
 1. You will be able to run Cursor Cloud Agents in your own environment, which is the point of this lab.

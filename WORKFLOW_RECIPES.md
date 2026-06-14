@@ -80,7 +80,7 @@ Automate the parenthesized steps gradually via scripts, `AGENTS.md`, rules, slas
 
 | Surface | Good for |
 |---------|----------|
-| **Local** | `scripts/check.py` (you create from example), `AGENTS.md`, `.cursor/rules/`, `/commit-code`, pre-commit hooks |
+| **Local** | `scripts/check.sh` (Part 3 lab) or `scripts/check.py` (post-lab from example), `AGENTS.md`, `.cursor/rules/`, `/commit-code`, pre-commit hooks |
 | **Cloud Agent** | Same `AGENTS.md` + same check script in the Dockerfile-managed VM |
 | **GitHub** | Actions workflow on PR; Automations on **PR opened** or **CI completed**; Cloud Agents responding to CI/review events |
 
@@ -90,15 +90,17 @@ Implementation details depend on your stack and AI tool (Cursor, Copilot, Claude
 
 ## Example recipes (simple → advanced)
 
-> **Lab vs examples:** Only **Recipe 2** and **Recipe 5** (Part 3) are practiced in the workshop. Recipes 1, 3, 4, and 6 are illustrated by files in `examples/`—copy and extend them on your own fork after the lab.
+> **Lab vs examples:** **Recipes 1, 2, and 5** are practiced in the workshop (Part 3 Step 8 introduces `scripts/check.sh`). Recipes 3, 4, and 6 are illustrated by files in `examples/`—copy and extend them on your own fork after the lab.
 
-### Recipe 1 — Deterministic check script *(example only)*
+### Recipe 1 — Deterministic check script
 
-**One entry point** for humans and agents. Same command on Mac, Linux, Windows (PowerShell), and Cloud Agent Linux.
+**One entry point** for humans and agents. Same command on Mac, Linux, Windows (Git Bash), and Cloud Agent Linux.
 
-When you adopt, copy [`examples/scripts/check.py`](examples/scripts/check.py) to `scripts/check.py` and grow it (ruff, smoke imports, etc.). The example includes commented extension points.
+- **In lab (Part 3, Step 8):** Students create [`scripts/check.sh`](scripts/check.sh) at the repo root—a minimal starter with `pip install --dry-run`, commented extension points (e.g. ruff), and `pytest`. Motivated by real agent mistakes (e.g. Streamlit pins incompatible with pinned pandas). Step 9 wires it into prompts, `AGENTS.md`, and hooks; Step 10 demos a fix pass (with the caveat that checks belong on **every** agent run, not a separate Cloud Agent only).
+- **Part 2:** Students still use `python -m pytest test_sales_report.py` via `AGENTS.md` (Recipe 2) before Part 3 adds the script.
+- **Post-lab:** Copy and grow [`examples/scripts/check.py`](examples/scripts/check.py) (Python entry point, more extension points) or extend your lab `check.sh`.
 
-Try the example from repo root (optional, post-lab):
+Try the fuller example from repo root (optional, post-lab):
 
 ```bash
 python examples/scripts/check.py
@@ -106,12 +108,10 @@ python examples/scripts/check.py
 
 On Mac/Linux or Git Bash: `bash examples/scripts/check.sh`
 
-- **Lab:** Students use `python -m pytest test_sales_report.py` via `AGENTS.md` (Recipe 2)—not this script.
-
-**`AGENTS.md` snippet (after you adopt):**
+**`AGENTS.md` snippet (after Part 3):**
 
 ```markdown
-Before pushing, run `python scripts/check.py` and fix all failures. Re-run until exit code 0.
+Before pushing or opening a PR, run `bash scripts/check.sh` and fix all failures. Re-run until exit code 0.
 ```
 
 ---
@@ -211,8 +211,8 @@ Jira ticket (context)
 
 ## Adoption path (suggested)
 
-1. **Recipe 2** — `AGENTS.md` + pytest (**lab**)
-2. **Recipe 1** — copy `examples/scripts/check.py` → `scripts/check.py`
+1. **Recipe 2** — `AGENTS.md` + pytest (**lab Part 2**)
+2. **Recipe 1** — `scripts/check.sh` with pip dry-run + pytest (**lab Part 3**); post-lab grow via `examples/scripts/check.py`
 3. **Recipe 3** — `/commit-code` for local commits (use `--quick` until sub-agent review is worth the cost)
 4. **Recipe 4** — GitHub Actions running the same script
 5. **Recipe 5** — PR Automation after ready + green CI (**lab Part 3**)
@@ -228,4 +228,4 @@ Take small steps. Adjust prompts and gates based on what fails in practice.
 |------|-------------------|
 | **Part 1** | Reproducible Cloud environment (same checks can run in the agent VM when you adopt them) |
 | **Part 2** | Recipe 2 + human local verify before merge |
-| **Part 3** | Recipe 5 + Automations vs Bugbot vs CI discussion |
+| **Part 3** | Recipes 1 + 5 — `check.sh`, merge PRs in order, wire gates (prompt / `AGENTS.md` / hooks); Automations vs Bugbot vs CI discussion |
