@@ -1,6 +1,7 @@
 *.pyc
 __pycache__/
 *.png
+*.pdf
 output/
 INSTRUCTOR.md
 NOTEBOOK_STYLE_GUIDE.ipynb
