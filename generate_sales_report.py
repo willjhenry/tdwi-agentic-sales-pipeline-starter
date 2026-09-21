@@ -1,10 +1,18 @@
-import pandas as pd
-import matplotlib.pyplot as plt
 import os
+
+os.environ.setdefault("MPLBACKEND", "Agg")
+
+import matplotlib.pyplot as plt
+import pandas as pd
 
 
 def load_and_clean_data():
     df = pd.read_csv("data/messy_sales_data.csv")
+    df = df.drop_duplicates().reset_index(drop=True)
+    df["date"] = pd.to_datetime(df["date"], format="mixed")
+    df["quantity"] = pd.to_numeric(df["quantity"])
+    df["price"] = pd.to_numeric(df["price"])
+    df["revenue"] = df["price"] * df["quantity"]
     return df
 
 
@@ -29,8 +37,10 @@ def create_chart(df):
 def mock_encrypt_export(df, secret_key):
     # Uses the secret (REPORT_EXPORT_KEY)
     encrypted_file = "output/encrypted_sales_report.csv"
+    os.makedirs(os.path.dirname(encrypted_file), exist_ok=True)
     df.to_csv(encrypted_file, index=False)
-    print(f"Exported encrypted report using secret: {secret_key[:4]}...")
+    key_preview = (secret_key or "")[:4]
+    print(f"Exported encrypted report using secret: {key_preview}...")
 
 
 def main():
