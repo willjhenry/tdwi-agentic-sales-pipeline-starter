@@ -15,10 +15,14 @@ def load_and_clean_data():
 
 
 def filter_sales(df, start_date, end_date, products, customer_id=None):
-    """Return rows inside the date range, for the selected products, and optionally one customer."""
-    start = pd.Timestamp(start_date)
-    end = pd.Timestamp(end_date)
-    filtered = df.loc[df["date"].between(start, end, inclusive="both")]
+    """Return rows on the selected calendar days, for the selected products, and optionally one customer.
+
+    The end date is the whole day, so a timestamp later that day stays included.
+    """
+    start = pd.Timestamp(start_date).normalize()
+    end = pd.Timestamp(end_date).normalize()
+    order_day = df["date"].dt.normalize()
+    filtered = df.loc[order_day.between(start, end, inclusive="both")]
     filtered = filtered.loc[filtered["product"].isin(products)]
     if customer_id is not None and str(customer_id).strip() != "":
         customer_key = str(customer_id).strip()

@@ -1,5 +1,6 @@
 import pandas as pd
 import pytest
+from streamlit.testing.v1 import AppTest
 
 from generate_sales_report import (
     daily_revenue,
@@ -56,6 +57,23 @@ def test_filter_limits_products_dates_and_customer(cleaned_df):
     assert filtered["date"].between(start, end).all()
 
 
+def test_filter_includes_times_on_the_end_date():
+    orders = pd.DataFrame(
+        {
+            "date": pd.to_datetime(
+                ["2025-02-02 15:00", "2025-02-02 00:00", "2025-02-03 00:01"]
+            ),
+            "product": ["Widget A", "Widget A", "Widget A"],
+            "customer_id": [101, 101, 102],
+            "revenue": [10.0, 20.0, 30.0],
+        }
+    )
+
+    filtered = filter_sales(orders, "2025-02-02", "2025-02-02", ["Widget A"])
+
+    assert list(filtered["revenue"]) == [10.0, 20.0]
+
+
 def test_optional_customer_filter_keeps_every_customer(cleaned_df):
     filtered = filter_sales(
         cleaned_df,
@@ -84,3 +102,28 @@ def test_daily_revenue_sums_to_total(cleaned_df):
     trend = daily_revenue(cleaned_df)
     assert trend.sum() == pytest.approx(cleaned_df["revenue"].sum())
     assert trend.index.is_monotonic_increasing
+
+
+def test_explorer_shows_unfiltered_kpis():
+    app = AppTest.from_file("revenue_explorer.py")
+    app.run()
+
+    assert not app.exception
+    values = {metric.label: metric.value for metric in app.metric}
+    assert values == {
+        "Total revenue": "$1,459.48",
+        "Order count": "25",
+        "Average order value": "$58.38",
+    }
+
+
+def test_explorer_empty_sales_skips_filters(monkeypatch):
+    empty = pd.DataFrame(columns=["date", "product", "customer_id", "revenue"])
+    monkeypatch.setattr("generate_sales_report.load_and_clean_data", lambda: empty)
+
+    app = AppTest.from_file("revenue_explorer.py")
+    app.run()
+
+    assert not app.exception
+    assert app.metric == []
+    assert [info.value for info in app.info] == ["No orders match the current filters."]

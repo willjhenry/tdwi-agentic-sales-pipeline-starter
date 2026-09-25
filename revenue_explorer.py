@@ -11,13 +11,11 @@ from generate_sales_report import (
 st.set_page_config(page_title="Revenue Explorer", layout="wide")
 st.title("Revenue Explorer")
 
+sales = load_and_clean_data()
+if sales.empty:
+    st.info("No orders match the current filters.")
+    st.stop()
 
-@st.cache_data
-def load_sales():
-    return load_and_clean_data()
-
-
-sales = load_sales()
 min_date = sales["date"].min().date()
 max_date = sales["date"].max().date()
 product_options = sorted(sales["product"].unique())
