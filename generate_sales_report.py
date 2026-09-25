@@ -5,6 +5,12 @@ import os
 
 def load_and_clean_data():
     df = pd.read_csv("data/messy_sales_data.csv")
+    df["date"] = pd.to_datetime(df["date"], format="mixed")
+    df["quantity"] = pd.to_numeric(df["quantity"], errors="coerce")
+    df["price"] = pd.to_numeric(df["price"], errors="coerce")
+    df = df.dropna(subset=["date", "quantity", "price"])
+    df = df.drop_duplicates()
+    df["revenue"] = df["price"] * df["quantity"]
     return df
 
 
@@ -28,9 +34,13 @@ def create_chart(df):
 
 def mock_encrypt_export(df, secret_key):
     # Uses the secret (REPORT_EXPORT_KEY)
+    os.makedirs("output", exist_ok=True)
     encrypted_file = "output/encrypted_sales_report.csv"
     df.to_csv(encrypted_file, index=False)
-    print(f"Exported encrypted report using secret: {secret_key[:4]}...")
+    if secret_key:
+        print(f"Exported encrypted report using secret: {secret_key[:4]}...")
+    else:
+        print("Exported sales report CSV")
 
 
 def main():
