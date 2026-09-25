@@ -14,16 +14,49 @@ def load_and_clean_data():
     return df
 
 
+def filter_sales(df, start_date, end_date, products, customer_id=None):
+    """Return rows on the selected calendar days, for the selected products, and optionally one customer.
+
+    The end date is the whole day, so a timestamp later that day stays included.
+    """
+    start = pd.Timestamp(start_date).normalize()
+    end = pd.Timestamp(end_date).normalize()
+    order_day = df["date"].dt.normalize()
+    filtered = df.loc[order_day.between(start, end, inclusive="both")]
+    filtered = filtered.loc[filtered["product"].isin(products)]
+    if customer_id is not None and str(customer_id).strip() != "":
+        customer_key = str(customer_id).strip()
+        filtered = filtered.loc[filtered["customer_id"].astype(str) == customer_key]
+    return filtered
+
+
+def summarize_sales(df):
+    """Total revenue, order count, and average order value for the given rows."""
+    order_count = int(len(df))
+    if order_count == 0:
+        return 0.0, 0, 0.0
+    total_revenue = float(df["revenue"].sum())
+    average_order_value = float(df["revenue"].mean())
+    return total_revenue, order_count, average_order_value
+
+
+def daily_revenue(df):
+    """Revenue summed by order date, sorted chronologically."""
+    if df.empty:
+        return pd.Series(dtype="float64", name="revenue")
+    return df.groupby("date")["revenue"].sum().sort_index().rename("revenue")
+
+
 def generate_metrics(df):
-    total_revenue = df["revenue"].sum()
+    total_revenue, _, avg_order_value = summarize_sales(df)
     top_customers = df.groupby("customer_id")["revenue"].sum().nlargest(5)
-    avg_order_value = df["revenue"].mean()
     return total_revenue, top_customers, avg_order_value
 
 
 def create_chart(df):
-    daily = df.groupby("date")["revenue"].sum()
-    daily.index = daily.index.strftime("%Y-%m-%d")
+    daily = daily_revenue(df)
+    if not daily.empty:
+        daily.index = daily.index.strftime("%Y-%m-%d")
     plt.figure(figsize=(10, 6))
     daily.plot(kind="bar")
     plt.title("Daily Revenue Trend")
