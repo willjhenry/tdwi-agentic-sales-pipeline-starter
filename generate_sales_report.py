@@ -22,8 +22,10 @@ def generate_metrics(df):
 
 
 def create_chart(df):
+    daily = df.groupby("date")["revenue"].sum()
+    daily.index = daily.index.strftime("%Y-%m-%d")
     plt.figure(figsize=(10, 6))
-    df.groupby("date")["revenue"].sum().plot(kind="bar")
+    daily.plot(kind="bar")
     plt.title("Daily Revenue Trend")
     plt.xlabel("Date")
     plt.ylabel("Revenue")
